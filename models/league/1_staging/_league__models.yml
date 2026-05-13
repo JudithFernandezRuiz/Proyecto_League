@@ -1,0 +1,233 @@
+version: 2
+
+models:
+  - name: stg_jugador
+    description: "Jugadores únicos con su elo y equipo"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: puuid
+        tests:
+          - unique
+          - not_null
+      - name: nombre_invocador
+        tests:
+          - not_null
+      - name: elo
+        tests:
+          - not_null
+      - name: lp
+        tests:
+          - not_null
+      
+  - name: stg_partida
+    description: "Partidas únicas con sus metadatos"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: patch
+        tests:
+          - not_null
+      - name: modo_juego
+        tests:
+          - not_null
+
+  - name: stg_campeon
+    description: "Catálogo de campeones únicos"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+    
+  - name: stg_tipo_evento
+    description: "Catálogo de tipos de eventos"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_tipo_campeon
+    description: "Clasificación de campeones por clase y rol"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_posicion_jugador
+    description: "Posiciones en el mapa"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+
+  - name: stg_ping
+    description: "Tipos de pings"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_pick_o_ban
+    description: "Picks y bans de cada partida"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: id_partida
+        tests:
+          - not_null
+      - name: id_campeon
+        tests:
+          - not_null
+      - name: tipo_accion
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['PICK', 'BAN']
+
+  - name: stg_objeto
+    description: "Catálogo de objetos"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_jugador_partida
+    description: "Relación jugador partida"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: id_jugador
+        tests:
+          - not_null
+      - name: id_partida
+        tests:
+          - not_null
+      - name: lado
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['BLUE', 'RED']
+
+  - name: stg_evento_partida
+    description: "Eventos del timeline de cada partida"
+    columns:
+      - name: id_jugador
+        tests:
+          - not_null
+      - name: id_partida
+        tests:
+          - not_null
+
+  - name: stg_equipo
+    description: "Bandos del juego"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+
+  - name: dim_jugador
+    description: "Dimensión de jugadores con su elo y equipo"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: puuid
+        tests:
+          - unique
+          - not_null
+      - name: nombre_invocador
+        tests:
+          - not_null
+      - name: elo
+        tests:
+          - not_null
+  
+  - name: dim_campeon
+    description: "Dimensión de campeones con su clase y rol"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: nombre
+        tests:
+          - not_null
+  
+  - name: dim_partida
+    description: "Dimensión de partidas con sus metadatos"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: patch
+        tests:
+          - not_null
+      - name: modo_juego
+        tests:
+          - not_null
+
+  - name: dim_tiempo
+    description: "Dimensión de tiempo derivada de las fechas de partida"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: fecha
+        tests:
+          - not_null
+      - name: anio
+        tests:
+          - not_null
+      - name: mes
+        tests:
+          - not_null
+  
+  - name: fact_resultado_partida
+    description: "Tabla de hechos con resultados de partidas"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: id_partida
+        tests:
+          - not_null
+      - name: id_jugador
+        tests:
+          - not_null
+      - name: id_campeon
+        tests:
+          - not_null
+      - name: id_tiempo
+        tests:
+          - not_null
+      - name: resultado
+        tests:
+          - not_null
