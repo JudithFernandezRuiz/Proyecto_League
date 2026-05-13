@@ -1,3 +1,11 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='id',
+        on_schema_change='fail'
+    )
+}}
+
 with stg_jugador_partida as (
 
     select * from {{ ref('stg_jugador_partida') }}
@@ -62,3 +70,7 @@ final as (
 )
 
 select * from final
+
+{% if is_incremental() %}
+    where id_partida not in (select distinct id_partida from {{ this }})
+{% endif %}
