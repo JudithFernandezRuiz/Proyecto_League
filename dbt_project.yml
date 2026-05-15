@@ -17,12 +17,13 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  Proyecto_League:  
+  Proyecto_League:
     league:
       1_staging:
         +materialized: view
-        +schema: SILVER
-        +database: "LEAGUE_DB"
+        +database: SILVER_DEV
+        +schema: staging
       2_marts:
         +materialized: table
-        +schema: gold
+        +database: GOLD_DEV
+        +schema: marts

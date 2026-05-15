@@ -2,8 +2,8 @@
 
 {{
     config(
-        target_database='LEAGUE_DB',
-        target_schema='BRONZE',
+        target_database='BRONZE_DB',
+        target_schema='PUBLIC',
         unique_key='puuid',
         strategy='check',
         check_cols=['elo', 'tier', 'lp'],
