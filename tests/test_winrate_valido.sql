@@ -1,5 +1,4 @@
--- Test singular: el resultado solo puede ser TRUE o FALSE (ganó o perdió)
 select *
-from {{ ref('fact_resultado_partida') }}
+from {{ ref('fact_rendimiento_jugador') }}
 where resultado is not null
   and resultado not in (true, false)

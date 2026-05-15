@@ -208,22 +208,13 @@ models:
       - name: mes
         tests:
           - not_null
-  
+
   - name: fact_resultado_partida
-    description: "Tabla de hechos con resultados de partidas"
+    description: "Tabla de hechos a nivel de partida"
     columns:
-      - name: id
-        tests:
-          - unique
-          - not_null
       - name: id_partida
         tests:
-          - not_null
-      - name: id_jugador
-        tests:
-          - not_null
-      - name: id_campeon
-        tests:
+          - unique
           - not_null
       - name: id_tiempo
         tests:

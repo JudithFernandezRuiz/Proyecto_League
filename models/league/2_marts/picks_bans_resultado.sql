@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        depends_on=['ref("fact_resultado_partida")']
     )
 }}
 
@@ -22,6 +23,12 @@ dim_campeon as (
 
 ),
 
+dim_equipo as (
+
+    select * from {{ ref('dim_equipo') }}
+
+),
+
 final as (
 
     select
@@ -32,16 +39,12 @@ final as (
         c.nombre                as campeon,
         c.clase,
         c.rol_principal,
-        f.resultado,
-        f.asesinatos,
-        f.muertes,
-        f.asistencias,
-        f.dano_campeon,
-        f.oro_total
+        e.nombre                as equipo_ganador,
+        f.resultado
     from picks p
-    join dim_campeon c  on c.id = p.id_campeon
-    join fact f         on f.id_partida = p.id_partida
-                       and f.id_campeon = p.id_campeon
+    join dim_campeon c      on c.id = p.id_campeon
+    join fact f             on f.id_partida = p.id_partida
+    left join dim_equipo e  on e.id = f.id_equipo
 
 )
 
