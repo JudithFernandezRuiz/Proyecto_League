@@ -1,23 +1,26 @@
-with 
-
-source as (
-
-    select * from {{ source('bronze', 'jugador_partida') }}
-
+with source as (
+    select * from {{ source('bronze', 'stg_challenger_jugadores') }}
 ),
 
 renamed as (
-
     select
-        id,
-        id_jugador,
-        id_partida,
-        lado,
-        id_posicion_jugador
-
+        match_id                    as id_partida,
+        puuid,
+        summonername                as nombre_invocador,
+        championid,
+        championname,
+        win,
+        kills,
+        deaths,
+        assists,
+        teamid                      as id_equipo,
+        individualposition          as posicion,
+        goldearned,
+        patch,
+        CASE WHEN teamid = 100 THEN 'BLUE' ELSE 'RED' END as lado
     from source
-  where id is not null
-
+    where match_id is not null
+      and puuid is not null
 )
 
 select distinct * from renamed
