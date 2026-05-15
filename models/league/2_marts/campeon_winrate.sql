@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        depends_on=['ref("fact_rendimiento_jugador")']
+        
     )
 }}
 

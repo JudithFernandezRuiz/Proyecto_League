@@ -9,7 +9,7 @@
 
 with stg_challenger_raw as (
 
-    select * from {{ source('bronze', 'stg_challenger_raw') }}
+    select * from {{ ref('stg_challenger_raw') }}
 
 ),
 

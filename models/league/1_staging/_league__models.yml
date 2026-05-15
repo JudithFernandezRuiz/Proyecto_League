@@ -99,7 +99,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['PICK', 'BAN']
+              arguments:
+                values: ['PICK', 'BAN']
 
   - name: stg_objeto
     description: "Catálogo de objetos"
@@ -126,7 +127,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['BLUE', 'RED']
+              arguments:
+                values: ['BLUE', 'RED']
 
   - name: stg_evento_partida
     description: "Eventos del timeline de cada partida"
