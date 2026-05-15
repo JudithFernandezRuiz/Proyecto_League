@@ -2,8 +2,8 @@ version: 2
 
 sources:
   - name: BRONZE
-    database: LEAGUE_DB
-    schema: BRONZE
+    database: "BRONZE_{{ env_var('DBT_ENVIRONMENTS', 'DEV') }}"
+    schema: LEAGUE
     tables:
       - name: campeon
         description: "Diccionario de campeones (ID, Nombre, Rol)"

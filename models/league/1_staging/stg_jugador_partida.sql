@@ -1,5 +1,6 @@
 with source as (
-    select * from {{ source('bronze', 'stg_challenger_raw') }}
+select * from {{ source('bronze', 'stg_challenger_jugadores') }}
+
 ),
 
 renamed as (
