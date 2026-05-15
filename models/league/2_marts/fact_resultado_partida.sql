@@ -1,3 +1,4 @@
+-- models/league/2_marts/fact_resultado_partida.sql
 {{
     config(
         materialized='incremental',
@@ -6,30 +7,26 @@
     )
 }}
 
-with dim_partida as (
-    select * from {{ ref('dim_partida') }}
-),
-
-dim_tiempo as (
-    select * from {{ ref('dim_tiempo') }}
-),
-
-dim_equipo as (
-    select * from {{ ref('dim_equipo') }}
+with stg_partida as (
+    select * from {{ ref('stg_partida') }}
 ),
 
 final as (
     select
-        p.id                as id_partida,
-        t.id                as id_tiempo,
-        e.id                as id_equipo,
-        p.resultado
-    from dim_partida p
-    left join dim_tiempo t  on t.fecha = p.fecha_inicio::date
-    left join dim_equipo e  on e.nombre = p.resultado
+        p.id                                as id_partida,
+        p.patch,
+        p.modo_juego,
+        CASE 
+            WHEN LOWER(p.resultado) = 'true' THEN 'VICTORIA'
+            WHEN LOWER(p.resultado) = 'false' THEN 'DERROTA'
+            ELSE p.resultado 
+        END                                 as resultado,
+        p.fecha_inicio,
+        p.fecha_fin,
+        DATEDIFF(second, p.fecha_inicio, p.fecha_fin) as duracion_segundos
+    from stg_partida p
     
     {% if is_incremental() %}
-    -- El filtro debe ir AQUÍ, dentro de la definición de la tabla
     where p.id not in (select id_partida from {{ this }})
     {% endif %}
 )

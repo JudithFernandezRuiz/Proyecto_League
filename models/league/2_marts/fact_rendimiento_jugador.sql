@@ -1,70 +1,44 @@
+-- models/league/2_marts/fact_rendimiento_jugador.sql
 {{
     config(
         materialized='incremental',
-        unique_key='id',
-        on_schema_change='fail',
-        depends_on=['ref("fact_resultado_partida")']
+        unique_key=['id_partida', 'puuid'],
+        on_schema_change='fail'
     )
 }}
 
-with stg_challenger_raw as (
-
-    select * from {{ ref('stg_challenger_raw') }}
-
+with stg_jugador_partida as (
+    select * from {{ ref('stg_jugador_partida') }}
 ),
 
-dim_jugador as (
-
-    select * from {{ ref('dim_jugador') }}
-
-),
-
-dim_campeon as (
-
-    select * from {{ ref('dim_campeon') }}
-
-),
-
-dim_partida as (
-
-    select * from {{ ref('dim_partida') }}
-
-),
-
-dim_tiempo as (
-
-    select * from {{ ref('dim_tiempo') }}
-
+stg_partida as (
+    select * from {{ ref('stg_partida') }}
 ),
 
 final as (
-
     select
-        ROW_NUMBER() OVER (ORDER BY r.match_id, r.puuid)    as id,
-        r.match_id                                          as id_partida,
-        j.id                                                as id_jugador,
-        c.id                                                as id_campeon,
-        t.id                                                as id_tiempo,
-        CASE WHEN r.participantid::integer <= 5 
-            THEN 'BLUE' ELSE 'RED' END                      as lado,
-        r.win::boolean                                      as resultado,
-        r.kills::integer                                    as asesinatos,
-        r.deaths::integer                                   as muertes,
-        r.assists::integer                                  as asistencias,
-        r.totalminionskilled::integer                       as cs,
-        r.goldearned::integer                               as oro_total,
-        r.teamposition                                      as posicion,
-        r.visionscore::integer                              as vision_score
-    from stg_challenger_raw r
-    join dim_jugador j      on j.puuid = r.puuid
-    join dim_campeon c      on c.id = r.championid::integer
-    join dim_partida p      on p.id = r.match_id
-    join dim_tiempo t       on t.fecha = p.fecha_inicio::date
-
+        ROW_NUMBER() OVER (ORDER BY jp.id_partida, jp.puuid) as id,
+        jp.id_partida,
+        jp.puuid,
+        jp.championid                          as id_campeon,
+        EXTRACT(YEAR FROM p.fecha_inicio)     as anio,
+        EXTRACT(MONTH FROM p.fecha_inicio)    as mes,
+        EXTRACT(DAY FROM p.fecha_inicio)      as dia,
+        jp.lado,
+        jp.win                                 as resultado,
+        CAST(jp.kills AS INTEGER)              as asesinatos,
+        CAST(jp.deaths AS INTEGER)             as muertes,
+        CAST(jp.assists AS INTEGER)            as asistencias,
+        jp.posicion,
+        CAST(jp.goldearned AS INTEGER)         as oro_total,
+        jp.nombre_invocador,
+        jp.championname
+    from stg_jugador_partida jp
+    inner join stg_partida p on p.id = jp.id_partida
+    
+    {% if is_incremental() %}
+    where jp.id_partida not in (select distinct id_partida from {{ this }})
+    {% endif %}
 )
 
 select * from final
-
-{% if is_incremental() %}
-    where id_partida not in (select distinct id_partida from {{ this }})
-{% endif %}
