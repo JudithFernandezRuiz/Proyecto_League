@@ -1,19 +1,18 @@
 with source as (
 
-    select * from {{ source('bronze', 'campeon') }}
+    select * from {{ source('bronze', 'raw_challenger_jugadores') }}
 
 ),
 
 renamed as (
 
-    select
-        id,
-        id_tipo_campeon,
-        nombre
+    select distinct
+        championid::integer as id,
+        championname as nombre
     from source
-    where id is not null
-      and nombre is not null
+    where championid is not null
+      and championname is not null
 
 )
 
-select distinct * from renamed
+select * from renamed

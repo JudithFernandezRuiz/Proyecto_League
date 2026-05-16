@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('bronze', 'tipo_campeon') }}
+    select * from {{ source('bronze', 'CAMPEON_DRAGON') }}
 
 ),
 

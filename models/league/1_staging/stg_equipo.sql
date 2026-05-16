@@ -1,20 +1,10 @@
-with 
+-- Tabla de referencia: equipos en League of Legends
+with equipos as (
 
-source as (
-
-    select * from {{ source('bronze', 'equipo') }}
-
-),
-
-renamed as (
-
-    select
-        id,
-        nombre
-
-    from source
-  where id is not null
+    select 100 as id, 'BLUE' as nombre
+    union all
+    select 200, 'RED'
 
 )
 
-select distinct * from renamed
+select * from equipos

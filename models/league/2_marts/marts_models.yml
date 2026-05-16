@@ -1,0 +1,224 @@
+version: 2
+
+models:
+  # ===================================
+  # FACTS - Tablas de hechos
+  # ===================================
+  
+  - name: fact_resultado_partida
+    description: Hechos sobre el resultado de cada partida jugada
+    columns:
+      - name: id_partida
+        description: Identificador único de la partida (match_id de Riot)
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: patch
+        description: Versión del juego (patch) en que se jugó la partida
+        data_tests:
+          - not_null
+      
+      - name: modo_juego
+        description: Tipo de cola (RANKED_SOLO, FLEX_Q, ARAM, OTHER)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['SOLO_Q', 'FLEX_Q', 'ARAM', 'OTHER']
+                
+      - name: resultado
+        description: Resultado de la partida (VICTORIA o DERROTA)
+        data_tests:
+          - accepted_values:
+              arguments: 
+                values: ['VICTORIA', 'DERROTA']
+      
+      - name: fecha_inicio
+        description: Timestamp del inicio de la partida
+        data_tests:
+          - not_null
+      
+      - name: fecha_fin
+        description: Timestamp del fin de la partida (NULL si aún no finalizada)
+      
+      - name: duracion_segundos
+        description: Duración de la partida en segundos
+
+  - name: fact_rendimiento_jugador
+    description: Hechos sobre el rendimiento individual de cada jugador en cada partida
+    columns:
+      - name: id
+        description: Identificador único de la fila (auto-incremental)
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: id_partida
+        description: Identificador de la partida (FK a fact_resultado_partida)
+        data_tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('dim_partida')
+                field: id
+      
+      - name: puuid
+        description: Player UUID - identificador único de Riot del jugador
+        data_tests:
+          - not_null
+      
+      - name: id_campeon
+        description: ID del campeón jugado
+        data_tests:
+          - not_null
+      
+      - name: anio
+        description: Año de la partida
+        data_tests:
+          - not_null
+      
+      - name: mes
+        description: Mes de la partida (1-12)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      
+      - name: dia
+        description: Día del mes de la partida (1-31)
+        data_tests:
+          - not_null
+      
+      - name: lado
+        description: Lado del equipo (BLUE=100 o RED=200)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['BLUE', 'RED']
+      
+      - name: resultado
+        description: Resultado individual del jugador (true=victoria, false=derrota)
+        data_tests:
+          - not_null
+      
+      - name: asesinatos
+        description: Número de kills obtenidas por el jugador
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments: 
+                min_value: 0
+                max_value: 100
+      
+      - name: muertes
+        description: Número de muertes del jugador
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments: 
+                min_value: 0
+                max_value: 100
+      
+      - name: asistencias
+        description: Número de asistencias del jugador
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments: 
+                min_value: 0
+                max_value: 100
+      
+      - name: posicion
+        description: Posición del jugador en la partida (TOP, JUNGLE, MID, BOTTOM, SUPPORT)
+        data_tests:
+          - accepted_values:
+              arguments: 
+                values: ['TOP', 'JUNGLE', 'MID', 'MIDDLE', 'BOTTOM', 'SUPPORT', 'UTILITY']
+      
+      - name: oro_total
+        description: Oro total generado por el jugador en la partida
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments: 
+                min_value: 0
+                max_value: 50000
+      
+      - name: nombre_invocador
+        description: Nombre visible del jugador en la región
+      
+      - name: championname
+        description: Nombre del campeón jugado
+
+  # ===================================
+  # DIMENSIONS - Tablas de dimensión
+  # ===================================
+  
+  - name: dim_partida
+    description: Dimensión con detalles únicos de cada partida
+    columns:
+      - name: id
+        description: Identificador único de la partida
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: patch
+        description: Versión del juego en que se jugó
+        data_tests:
+          - not_null
+      
+      - name: modo_juego
+        description: Tipo de partida (RANKED_SOLO, FLEX_Q, ARAM, OTHER)
+        data_tests:
+          - not_null
+      
+      - name: fecha_inicio
+        description: Timestamp del inicio de la partida
+      
+      - name: fecha_fin
+        description: Timestamp del fin de la partida
+      
+      - name: resultado
+        description: Resultado general de la partida
+
+  - name: dim_tiempo
+    description: Dimensión temporal con granularidad diaria (calendario)
+    columns:
+   
+      - name: fecha
+        description: Fecha en formato DATE
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: anio
+        description: Año (YYYY)
+        data_tests:
+          - not_null
+      
+      - name: mes
+        description: Mes del año (1-12)
+        data_tests:
+          - not_null
+      
+      - name: semana
+        description: Número de semana del año (1-53)
+        data_tests:
+          - not_null
+      
+      - name: dia_semana
+        description: Día de la semana (1=Lunes, 7=Domingo)
+        data_tests:
+          - not_null
+      
+      - name: temporada
+        description: Trimestre del año (S1, S2, S3, S4)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments: 
+                values: ['S1', 'S2', 'S3', 'S4']

@@ -8,18 +8,19 @@
 }}
 
 with source as (
-    select * from {{ source('bronze', 'evento_partida') }}
+    select * from {{ source('bronze', 'raw_eventos') }}
 ),
 
 renamed as (
     select
-        id,
-        id_jugador,
-        id_partida,
-        tiempo_partida,
-        id_tipo_evento
+        row_number() over (order by match_id, timestamp_ms) as id,
+        participantid::integer as id_jugador,
+        match_id as id_partida,
+        to_timestamp(timestamp_ms::bigint / 1000) as tiempo_partida,
+        row_number() over (partition by match_id order by timestamp_ms) as id_tipo_evento
     from source
-    where id_jugador is not null
+    where participantid is not null 
+      and participantid != ''
 )
 
 select distinct * from renamed
