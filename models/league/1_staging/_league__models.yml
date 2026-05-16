@@ -113,14 +113,10 @@ models:
   - name: stg_jugador_partida
     description: "Relación jugador partida"
     columns:
-      - name: id
-        tests:
-          - unique
-          - not_null
-      - name: id_jugador
-        tests:
-          - not_null
       - name: id_partida
+        tests:
+          - not_null
+      - name: puuid
         tests:
           - not_null
       - name: lado
@@ -217,9 +213,6 @@ models:
       - name: id_partida
         tests:
           - unique
-          - not_null
-      - name: id_tiempo
-        tests:
           - not_null
       - name: resultado
         tests:

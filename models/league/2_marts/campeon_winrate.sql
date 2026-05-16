@@ -1,7 +1,6 @@
 {{
     config(
-        materialized='table',
-        
+        materialized='table'
     )
 }}
 
@@ -14,22 +13,22 @@ with fact as (
 ranked as (
 
     select
-        id_jugador,
+        puuid,
         id_campeon,
         COUNT(*)                                                        as partidas_jugadas,
-        SUM(CASE WHEN resultado = true THEN 1 ELSE 0 END)              as victorias,
-        ROUND(SUM(CASE WHEN resultado = true THEN 1 ELSE 0 END) * 100.0
+        SUM(CASE WHEN resultado = 'True' THEN 1 ELSE 0 END)            as victorias,
+        ROUND(SUM(CASE WHEN resultado = 'True' THEN 1 ELSE 0 END) * 100.0
             / COUNT(*), 2)                                             as winrate_pct,
-        RANK() OVER (PARTITION BY id_jugador ORDER BY COUNT(*) DESC)   as ranking_uso
+        RANK() OVER (PARTITION BY puuid ORDER BY COUNT(*) DESC)        as ranking_uso
     from fact
-    group by id_jugador, id_campeon
+    group by puuid, id_campeon
 
 ),
 
 final as (
 
     select
-        id_jugador,
+        puuid,
         id_campeon,
         partidas_jugadas,
         victorias,

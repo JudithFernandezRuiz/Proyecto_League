@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: BRONZE
+  - name: bronze
     database: "BRONZE_{{ env_var('DBT_ENVIRONMENTS', 'DEV') }}"
     schema: LEAGUE
     tables:
@@ -129,37 +129,7 @@ sources:
           - name: nombre
             data_type: varchar
 
-      - name: stg_challenger_jugadores
-        description: "Carga preliminar de datos de jugadores específicos para validación."
-        columns:
-          - name: match_id
-            data_type: varchar
-          - name: puuid
-            data_type: varchar
-          - name: summonername
-            data_type: varchar
-          - name: championid
-            data_type: number
-          - name: championname
-            data_type: varchar
-          - name: win
-            data_type: boolean
-          - name: kills
-            data_type: number
-          - name: deaths
-            data_type: number
-          - name: assists
-            data_type: number
-          - name: teamid
-            data_type: number
-          - name: individualposition
-            data_type: varchar
-          - name: goldearned
-            data_type: number
-          - name: patch
-            data_type: varchar
-
-      - name: stg_challenger_raw
+      - name: RAW_CHALLENGER_JUGADORES
         description: "Extracción masiva de estadísticas finales de partidas de nivel Challenger."
         columns:
           - name: match_id
