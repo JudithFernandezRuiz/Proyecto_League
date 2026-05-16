@@ -5,490 +5,74 @@ sources:
     database: "BRONZE_{{ env_var('DBT_ENVIRONMENTS', 'DEV') }}"
     schema: LEAGUE
     tables:
-      - name: campeon
-        description: "Diccionario de campeones (ID, Nombre, Rol)"
-        columns:
-          - name: id
-            data_type: number
-          - name: id_tipo_campeon
-            data_type: number
-          - name: nombre
-            data_type: varchar
-
-      - name: equipo
-        description: "Información de bando (Azul 100, Rojo 200)"
-        columns:
-          - name: id
-            data_type: number
-          - name: nombre
-            data_type: varchar
-
-      - name: evento_partida
-        description: "Sucesos temporales (muertes, objetivos, destrucciones)"
-        columns:
-          - name: id
-            data_type: number
-          - name: id_jugador
-            data_type: number
-          - name: id_partida
-            data_type: varchar
-          - name: tiempo_partida
-            data_type: timestamp_ntz
-          - name: id_tipo_evento
-            data_type: number
-
-      - name: jugador
-        description: "Perfil de los invocadores (Nombre, PUUID, Rango)"
-        columns:
-          - name: id
-            data_type: number
-          - name: id_equipo
-            data_type: number
-          - name: nombre_invocador
-            data_type: varchar
-          - name: puuid
-            data_type: varchar
-          - name: elo
-            data_type: varchar
-          - name: tier
-            data_type: varchar
-          - name: lp
-            data_type: number
-
-      - name: jugador_partida
-        description: "Relación de qué jugador estuvo en qué partida y en qué bando"
-        columns:
-          - name: id
-            data_type: number
-          - name: id_jugador
-            data_type: number
-          - name: id_partida
-            data_type: varchar
-          - name: lado
-            data_type: varchar
-          - name: id_posicion_jugador
-            data_type: number
-
-      - name: objeto
-        description: "Catálogo de items del juego"
-        columns:
-          - name: id
-            data_type: number
-          - name: nombre
-            data_type: varchar
-
-      - name: partida
-        description: "Tabla principal con metadatos de cada encuentro único."
-        columns:
-          - name: id
-            data_type: varchar
-          - name: fecha_inicio
-            data_type: timestamp_ntz
-          - name: fecha_fin
-            data_type: timestamp_ntz
-          - name: patch
-            data_type: varchar
-          - name: modo_juego
-            data_type: varchar
-          - name: resultado
-            data_type: varchar
-
-      - name: pick_o_ban
-        description: "Detalle de la fase de draft (selección y bloqueo) de campeones."
-        columns:
-          - name: id
-            data_type: number
-          - name: id_partida
-            data_type: varchar
-          - name: id_jugador
-            data_type: number
-          - name: id_campeon
-            data_type: number
-          - name: tipo_accion
-            data_type: varchar
-          - name: orden_secuencia
-            data_type: number
-          - name: lado
-            data_type: varchar
-
-      - name: ping
-        description: "Diccionario de tipos de señales (pings) utilizadas por los jugadores."
-        columns:
-          - name: id
-            data_type: number
-          - name: id_tipo_ping
-            data_type: number
-          - name: tipo
-            data_type: varchar
-
-      - name: posicion_jugador
-        description: "Mapeo de posiciones en el mapa (TOP, JUNGLE, MID, etc.)."
-        columns:
-          - name: id
-            data_type: number
-          - name: nombre
-            data_type: varchar
-
       - name: RAW_CHALLENGER_JUGADORES
-        description: "Extracción masiva de estadísticas finales de partidas de nivel Challenger."
+        description: "Raw data from challenger_jugadores.csv - ~120 columns with player match data"
         columns:
           - name: match_id
-            data_type: varchar
+            description: "Unique match identifier from Riot API"
           - name: puuid
-            data_type: varchar
-          - name: summonername
-            data_type: varchar
-          - name: riotidgamename
-            data_type: varchar
-          - name: riotidtagline
-            data_type: varchar
-          - name: summonerid
-            data_type: varchar
-          - name: summonerlevel
-            data_type: varchar
-          - name: profileicon
-            data_type: varchar
-          - name: participantid
-            data_type: varchar
-          - name: elo
-            data_type: varchar
-          - name: tier
-            data_type: varchar
-          - name: lp
-            data_type: varchar
-          - name: wins_ranked
-            data_type: varchar
-          - name: losses_ranked
-            data_type: varchar
-          - name: championid
-            data_type: varchar
-          - name: championname
-            data_type: varchar
-          - name: champlevel
-            data_type: varchar
-          - name: champexperience
-            data_type: varchar
-          - name: teamid
-            data_type: varchar
-          - name: win
-            data_type: varchar
-          - name: teamposition
-            data_type: varchar
-          - name: individualposition
-            data_type: varchar
-          - name: role
-            data_type: varchar
-          - name: lane
-            data_type: varchar
-          - name: kills
-            data_type: varchar
-          - name: deaths
-            data_type: varchar
-          - name: assists
-            data_type: varchar
-          - name: largestkillingspree
-            data_type: varchar
-          - name: largestmultikill
-            data_type: varchar
-          - name: killingsprees
-            data_type: varchar
-          - name: doublekills
-            data_type: varchar
-          - name: triplekills
-            data_type: varchar
-          - name: quadrakills
-            data_type: varchar
-          - name: pentakills
-            data_type: varchar
-          - name: unrealkills
-            data_type: varchar
-          - name: firstbloodkill
-            data_type: varchar
-          - name: firstbloodassist
-            data_type: varchar
-          - name: totaldamagedealt
-            data_type: varchar
-          - name: totaldamagedealttochampions
-            data_type: varchar
-          - name: physicaldamagedealt
-            data_type: varchar
-          - name: physicaldamagedealttochampions
-            data_type: varchar
-          - name: magicdamagedealt
-            data_type: varchar
-          - name: magicdamagedealttochampions
-            data_type: varchar
-          - name: truedamagedealt
-            data_type: varchar
-          - name: truedamagedealttochampions
-            data_type: varchar
-          - name: largestcriticalstrike
-            data_type: varchar
-          - name: totaldamageshieldedonteammates
-            data_type: varchar
-          - name: totalhealsonteammates
-            data_type: varchar
-          - name: totaldamagetaken
-            data_type: varchar
-          - name: physicaldamagetaken
-            data_type: varchar
-          - name: magicdamagetaken
-            data_type: varchar
-          - name: truedamagetaken
-            data_type: varchar
-          - name: damageselfmitigated
-            data_type: varchar
-          - name: totalheal
-            data_type: varchar
-          - name: totalunitshealed
-            data_type: varchar
-          - name: turretkills
-            data_type: varchar
-          - name: turrettakedowns
-            data_type: varchar
-          - name: turretslost
-            data_type: varchar
-          - name: damagedealttoturrets
-            data_type: varchar
-          - name: damagedealttobuildings
-            data_type: varchar
-          - name: inhibitorkills
-            data_type: varchar
-          - name: inhibitortakedowns
-            data_type: varchar
-          - name: inhibitorslost
-            data_type: varchar
-          - name: nexuskills
-            data_type: varchar
-          - name: nexustakedowns
-            data_type: varchar
-          - name: nexuslost
-            data_type: varchar
-          - name: firsttowerkill
-            data_type: varchar
-          - name: firsttowerassist
-            data_type: varchar
-          - name: damagedealttoobjectives
-            data_type: varchar
-          - name: objectivesstolen
-            data_type: varchar
-          - name: objectivesstolenassists
-            data_type: varchar
-          - name: baronkills
-            data_type: varchar
-          - name: dragonkills
-            data_type: varchar
-          - name: goldearned
-            data_type: varchar
-          - name: goldspent
-            data_type: varchar
-          - name: totalminionskilled
-            data_type: varchar
-          - name: neutralminionskilled
-            data_type: varchar
-          - name: visionscore
-            data_type: varchar
-          - name: wardsplaced
-            data_type: varchar
-          - name: wardskilled
-            data_type: varchar
-          - name: visionwardsboughtingame
-            data_type: varchar
-          - name: sightwardsboughtingame
-            data_type: varchar
-          - name: detectorwardsplaced
-            data_type: varchar
-          - name: allinpings
-            data_type: varchar
-          - name: assistmepings
-            data_type: varchar
-          - name: commandpings
-            data_type: varchar
-          - name: dangerpings
-            data_type: varchar
-          - name: enemymissingpings
-            data_type: varchar
-          - name: enemyvisionpings
-            data_type: varchar
-          - name: getbackpings
-            data_type: varchar
-          - name: holdpings
-            data_type: varchar
-          - name: needvisionpings
-            data_type: varchar
-          - name: onmywaypings
-            data_type: varchar
-          - name: pushpings
-            data_type: varchar
-          - name: visionclearedpings
-            data_type: varchar
-          - name: basicpings
-            data_type: varchar
-          - name: summoner1id
-            data_type: varchar
-          - name: summoner1casts
-            data_type: varchar
-          - name: summoner2id
-            data_type: varchar
-          - name: summoner2casts
-            data_type: varchar
-          - name: spell1casts
-            data_type: varchar
-          - name: spell2casts
-            data_type: varchar
-          - name: spell3casts
-            data_type: varchar
-          - name: spell4casts
-            data_type: varchar
-          - name: item0
-            data_type: varchar
-          - name: item1
-            data_type: varchar
-          - name: item2
-            data_type: varchar
-          - name: item3
-            data_type: varchar
-          - name: item4
-            data_type: varchar
-          - name: item5
-            data_type: varchar
-          - name: item6
-            data_type: varchar
-          - name: itemspurchased
-            data_type: varchar
-          - name: consumablespurchased
-            data_type: varchar
-          - name: timeplayed
-            data_type: varchar
-          - name: gameendedinearlysurrender
-            data_type: varchar
-          - name: gameendedinsurrender
-            data_type: varchar
-          - name: teamearlysurrendered
-            data_type: varchar
-          - name: longesttimespentliving
-            data_type: varchar
-          - name: totaltimespentdead
-            data_type: varchar
-          - name: totaltimeccdealt
-            data_type: varchar
-          - name: timeccingothers
-            data_type: varchar
-          - name: bountylevel
-            data_type: varchar
-          - name: perks_statperk_defense
-            data_type: varchar
-          - name: perks_statperk_flex
-            data_type: varchar
-          - name: perks_statperk_offense
-            data_type: varchar
-          - name: perks_primarystyle
-            data_type: varchar
-          - name: perks_secondarystyle
-            data_type: varchar
-          - name: perks_keystone
-            data_type: varchar
-          - name: gameduration_seg
-            data_type: varchar
-          - name: gameversion
-            data_type: varchar
-          - name: queueid
-            data_type: varchar
-          - name: platformid
-            data_type: varchar
-          - name: gamestarttimestamp
-            data_type: varchar
-
-      - name: stg_eventos_raw
-        description: "Datos brutos de eventos de línea de tiempo sin procesar."
+            description: "Player UUID - unique player identifier"
+          - name: summonerName
+            description: "Player summoner name"
+          - name: championId
+            description: "Champion ID used in match"
+          - name: wins
+            description: "Win result (true/false)"
+      
+      - name: raw_picks_bans
+        description: "Raw data from challenger_picks_bans.csv - picks and bans per match"
         columns:
           - name: match_id
-            data_type: varchar
-          - name: tipo_evento
-            data_type: varchar
-          - name: timestamp_ms
-            data_type: varchar
-          - name: minuto
-            data_type: varchar
-          - name: participantid
-            data_type: varchar
-          - name: killerid
-            data_type: varchar
-          - name: victimid
-            data_type: varchar
-          - name: assistingparticipantids
-            data_type: varchar
-          - name: itemid
-            data_type: varchar
-          - name: skillslot
-            data_type: varchar
-          - name: leveluptype
-            data_type: varchar
-          - name: wardtype
-            data_type: varchar
-          - name: buildingtype
-            data_type: varchar
-          - name: towertype
-            data_type: varchar
-          - name: lanetype
-            data_type: varchar
-          - name: monstertype
-            data_type: varchar
-          - name: monstersubtype
-            data_type: varchar
-          - name: teamid
-            data_type: varchar
-          - name: position_x
-            data_type: varchar
-          - name: position_y
-            data_type: varchar
-          - name: bounty
-            data_type: varchar
-          - name: shutdownbounty
-            data_type: varchar
-          - name: killtype
-            data_type: varchar
-
-      - name: stg_picks_bans_raw
-        description: "Datos brutos de la fase de picks y bans."
-        columns:
-          - name: match_id
-            data_type: varchar
+            description: "Match identifier"
           - name: tipo
-            data_type: varchar
+            description: "Action type (PICK or BAN)"
+          - name: championId
+            description: "Champion ID"
           - name: equipo
-            data_type: number
-          - name: championid
-            data_type: number
-          - name: orden
-            data_type: number
-          - name: win
-            data_type: boolean
-          - name: championname
-            data_type: varchar
-          - name: summonername
-            data_type: varchar
-          - name: teamposition
-            data_type: varchar
-
-      - name: tipo_campeon
-        description: "Clasificación de campeones por estilo de juego y rol."
+            description: "Team (100=BLUE, 200=RED)"
+      
+      - name: raw_eventos
+        description: "Raw data from challenger_eventos.csv - timeline events per match"
+        columns:
+          - name: match_id
+            description: "Match identifier"
+          - name: tipo_evento
+            description: "Event type (KILL, WARD_PLACED, etc)"
+          - name: timestamp_ms
+            description: "Event timestamp in milliseconds"
+          - name: participantId
+            description: "Player participant ID"
+      
+      - name: CAMPEON_DRAGON
+        description: "Champion reference data from Data Dragon - class and main role"
         columns:
           - name: id
-            data_type: number
-          - name: clase
-            data_type: varchar
-          - name: rol_principal
-            data_type: varchar
-
-      - name: tipo_evento
-        description: "Catálogo de tipos de acciones registradas en el timeline (muertes, wards, etc.)."
-        columns:
-          - name: id
-            data_type: number
+            description: "Champion ID"
+            tests:
+              - unique
+              - not_null
           - name: nombre
-            data_type: varchar
-          - name: id_objeto
-            data_type: number
-          - name: id_ping
-            data_type: number
+            description: "Champion name"
+            tests:
+              - not_null
+          - name: clase
+            description: "Champion class/type (e.g., Marksman, Mage, Tank)"
+          - name: rol_principal
+            description: "Main role/position where champion is typically played"
+      
+      - name: OBJETO_ITEMS
+        description: "In-game items reference data with cost information"
+        columns:
+          - name: id
+            description: "Item ID"
+            tests:
+              - unique
+              - not_null
+          - name: nombre
+            description: "Item name"
+            tests:
+              - not_null
+          - name: costo
+            description: "Item gold cost"
+            tests:
+              - not_null

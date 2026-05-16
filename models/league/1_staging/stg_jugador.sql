@@ -1,31 +1,29 @@
-with 
+with source as (
 
-source as (
-
-    select * from {{ source('bronze', 'jugador') }}
+    select * from {{ source('bronze', 'raw_challenger_jugadores') }}
 
 ),
 
 renamed as (
 
     select
-        id,
-        id_equipo,
-        nombre_invocador,
+        row_number() over (order by puuid) as id,
+        case when participantid::integer <= 5 then 100 else 200 end as id_equipo,
+        summonername as nombre_invocador,
         puuid,
         elo,
         tier,
-        lp
+        lp::integer as lp
     from source
     where puuid is not null
-      and nombre_invocador is not null
+      and summonername is not null
 
 ),
 
 deduplicado as (
 
     select *,
-        ROW_NUMBER() OVER (PARTITION BY puuid ORDER BY id) as rn
+        row_number() over (partition by puuid order by id) as rn
     from renamed
 
 )

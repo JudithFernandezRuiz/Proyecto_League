@@ -1,22 +1,17 @@
-with 
+with source as (
 
-source as (
-
-    select * from {{ source('bronze', 'tipo_evento') }}
+    select * from {{ source('bronze', 'raw_eventos') }}
 
 ),
 
 renamed as (
 
-    select
-        id,
-        nombre,
-        id_objeto,
-        id_ping
-
+    select distinct
+        row_number() over (order by tipo_evento) as id,
+        tipo_evento as nombre
     from source
-  where id is not null
+    where tipo_evento is not null
 
 )
 
-select distinct * from renamed
+select * from renamed

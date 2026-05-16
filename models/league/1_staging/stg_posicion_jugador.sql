@@ -1,20 +1,16 @@
-with 
+-- Tabla de referencia: posiciones en el mapa
+with posiciones as (
 
-source as (
-
-    select * from {{ source('bronze', 'posicion_jugador') }}
-
-),
-
-renamed as (
-
-    select
-        id,
-        nombre
-
-    from source
-    where id is not null
+    select 1 as id, 'TOP' as nombre
+    union all
+    select 2, 'JUNGLE'
+    union all
+    select 3, 'MIDDLE'
+    union all
+    select 4, 'BOTTOM'
+    union all
+    select 5, 'UTILITY'
 
 )
 
-select distinct * from renamed
+select * from posiciones

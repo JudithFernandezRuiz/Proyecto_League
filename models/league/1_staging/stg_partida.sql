@@ -1,20 +1,23 @@
 with source as (
 
-    select * from {{ source('bronze', 'RAW_CHALLENGER_JUGADORES') }}
+    select * from {{ source('bronze', 'raw_challenger_jugadores') }}
 
 ),
 
 renamed as (
 
     select distinct
-        match_id                                                as id,
-        gameversion                                             as patch,
-        'RANKED_SOLO'                                           as modo_juego,
-        win                                                     as resultado,
-        DATEADD('millisecond', 
-            SPLIT_PART(match_id, '_', 2)::bigint % 86400000,
-            CURRENT_DATE::timestamp)                            as fecha_inicio,
-        NULL::timestamp                                         as fecha_fin
+        match_id as id,
+        gameversion as patch,
+        case 
+            when queueid = '420' then 'SOLO_Q'
+            when queueid = '440' then 'FLEX_Q'
+            when queueid = '450' then 'ARAM'
+            else 'OTHER'
+        end as modo_juego,
+        win as resultado,
+        to_timestamp(gamestarttimestamp::bigint / 1000) as fecha_inicio,
+        null::timestamp as fecha_fin
     from source
     where match_id is not null
 
@@ -23,7 +26,7 @@ renamed as (
 deduplicado as (
 
     select *,
-        ROW_NUMBER() OVER (PARTITION BY id ORDER BY id) as rn
+        row_number() over (partition by id order by id) as rn
     from renamed
 
 )
