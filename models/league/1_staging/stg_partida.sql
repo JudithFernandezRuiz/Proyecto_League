@@ -16,7 +16,7 @@ renamed as (
         TO_TIMESTAMP(gamestarttimestamp::bigint / 1000)        as fecha_inicio,
         NULL::timestamp                                         as fecha_fin
     from source
-    where match_id is not null
+    where match_id is not null and modo_juego is not null
 ),
 
 deduplicado as (

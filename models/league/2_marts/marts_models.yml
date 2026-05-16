@@ -25,8 +25,8 @@ models:
           - not_null
           - accepted_values:
               arguments: 
-                values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
-      
+                values: ['SOLO_Q', 'FLEX_Q', 'ARAM', 'OTHER']
+                
       - name: resultado
         description: Resultado de la partida (VICTORIA o DERROTA)
         data_tests:
