@@ -18,7 +18,7 @@ final as (
         t.clase,
         t.rol_principal
     from stg_campeon c
-    left join stg_tipo_campeon t on c.id_tipo_campeon = t.id
+    left join stg_tipo_campeon t on c.id = t.id
 
 )
 

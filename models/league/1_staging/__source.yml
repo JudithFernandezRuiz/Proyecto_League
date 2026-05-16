@@ -5,7 +5,7 @@ sources:
     database: "BRONZE_{{ env_var('DBT_ENVIRONMENTS', 'DEV') }}"
     schema: LEAGUE
     tables:
-      - name: RAW_CHALLENGER_JUGADORES
+      - name: raw_challenger_jugadores
         description: "Raw data from challenger_jugadores.csv - ~120 columns with player match data"
         columns:
           - name: match_id

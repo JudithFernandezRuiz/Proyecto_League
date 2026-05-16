@@ -1,0 +1,14 @@
+version: 2
+
+models:
+
+ - name: fact_resultado_partida
+   description: "Tabla de hechos a nivel de partida"
+   columns:
+     - name: id_partida
+        tests:
+          - unique
+          - not_null
+      - name: resultado
+        tests:
+          - not_null
