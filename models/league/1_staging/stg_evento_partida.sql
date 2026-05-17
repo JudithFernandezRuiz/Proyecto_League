@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ ref('base__evento_partida') }}
+    select * from {{ ref('base__eventos') }}
 ),
 
 participantes as (
@@ -8,22 +8,17 @@ participantes as (
 
 final as (
     select
-       
-        source.id_evento, 
-        source.id_partida,
-        
+        source.match_id as id_partida, 
         substring(cast(p.puuid as string), 1, 12) as id_jugador,
-        source.tiempo_partida,
-        source.id_tipo_evento
+        source.timestamp_ms as tiempo_partida, 
+        source.tipo_evento 
     from source
     left join participantes p 
-        on source.id_partida = p.id_partida 
+        on source.match_id = p.match_id 
         and source.participantid::integer = p.participantid::integer
-    where source.tiempo_partida is not null
-      and source.id_tipo_evento is not null
+    where source.timestamp_ms is not null
+      and source.tipo_evento is not null
       and p.puuid is not null
 )
 
-
 select * from final
-qualify ROW_NUMBER() OVER (PARTITION BY id_evento ORDER BY id_partida) = 1
