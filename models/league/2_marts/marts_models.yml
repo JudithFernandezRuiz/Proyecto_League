@@ -22,10 +22,10 @@ models:
       - name: modo_juego
         description: Tipo de cola (RANKED_SOLO, FLEX_Q, ARAM, OTHER)
         data_tests:
-        - not_null
-        - accepted_values:
-            arguments:
-              values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
                 
       - name: resultado
         description: Resultado de la partida (VICTORIA o DERROTA)
@@ -49,7 +49,7 @@ models:
     description: Hechos sobre el rendimiento individual de cada jugador en cada partida
     columns:
       - name: id
-        description: Identificador único de la fila (auto-incremental)
+        description: Identificador único de la fila (Surrogate Key hash de partida + jugador)
         data_tests:
           - unique
           - not_null
@@ -60,11 +60,11 @@ models:
           - not_null
           - relationships:
               arguments: 
-                to: ref('dim_partida')
-                field: id
+                to: ref('fact_resultado_partida') # Corregido para que apunte a tu tabla fact de partidas
+                field: id_partida
       
-      - name: puuid
-        description: Player UUID - identificador único de Riot del jugador
+      - name: id_jugador
+        description: Player UUID (PUUID) - identificador único de Riot del jugador
         data_tests:
           - not_null
       
@@ -92,10 +92,11 @@ models:
           - not_null
       
       - name: lado
-        tests:
-        - accepted_values:
-            arguments:
-              values: ['Azul', 'Rojo']
+        description: Lado del mapa en el que jugó
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Azul', 'Rojo']
       
       - name: resultado
         description: Resultado individual del jugador (true=victoria, false=derrota)
@@ -130,7 +131,7 @@ models:
                 max_value: 100
       
       - name: id_posicion_jugador
-        description: Posición del jugador en la partida
+        description: ID de la posición del jugador en la partida
         data_tests:
           - not_null
       
@@ -142,12 +143,6 @@ models:
               arguments: 
                 min_value: 0
                 max_value: 50000
-      
-      - name: nombre_invocador
-        description: Nombre visible del jugador en la región
-      
-      - name: championname
-        description: Nombre del campeón jugado
 
   # ===================================
   # DIMENSIONS - Tablas de dimensión
@@ -184,7 +179,6 @@ models:
   - name: dim_tiempo
     description: Dimensión temporal con granularidad diaria (calendario)
     columns:
-   
       - name: fecha
         description: Fecha en formato DATE
         data_tests:

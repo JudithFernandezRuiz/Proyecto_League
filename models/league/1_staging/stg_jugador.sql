@@ -4,12 +4,12 @@ with source as (
 
 final as (
     select
-        {{ dbt_utils.generate_surrogate_key(['puuid']) }} as id_jugador,
-        puuid,
+        puuid as id_jugador, -- El puuid es el rey absoluto, limpio y único
         summonername as nombre_invocador,
         elo,
         tier,
         lp::integer as lp
+        -- Eliminamos 'lado', 'id_equipo' o cualquier dato que cambie por partida
     from source
     where puuid is not null
       and summonername is not null

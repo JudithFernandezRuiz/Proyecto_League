@@ -1,5 +1,3 @@
--- models/league/1_staging/base/base__picks_bans.sql
-
 with source as (
     select * from {{ source('bronze', 'raw_picks_bans') }}
 ),
@@ -15,6 +13,8 @@ final as (
     from source
     where match_id is not null
       and championid is not null
+      and summonername is not null
+      and summonername != ''
 )
 
 select * from final

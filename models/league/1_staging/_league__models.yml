@@ -3,13 +3,9 @@ version: 2
 models:
 
   - name: stg_jugador
-    description: "Jugadores únicos con su elo y equipo"
+    description: "Jugadores únicos con su elo y rango"
     columns:
       - name: id_jugador
-        tests:
-          - unique
-          - not_null
-      - name: puuid
         tests:
           - unique
           - not_null
@@ -145,9 +141,6 @@ models:
         tests:
           - not_null
       - name: id_jugador
-        tests:
-          - not_null
-      - name: puuid
         tests:
           - not_null
       - name: lado
