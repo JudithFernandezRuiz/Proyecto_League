@@ -28,7 +28,7 @@ sources:
             description: "Action type (PICK or BAN)"
           - name: championId
             description: "Champion ID"
-          - name: equipo
+          - name: lado
             description: "Team (100=BLUE, 200=RED)"
       
       - name: raw_eventos
@@ -76,3 +76,16 @@ sources:
             description: "Item gold cost"
             tests:
               - not_null
+      - name: jugador
+        description: "Perfil de los invocadores (Nombre, PUUID, Rango)"
+        columns:
+          - name: puuid
+            data_type: varchar
+          - name: nombre_invocador
+            data_type: varchar
+          - name: elo
+            data_type: varchar
+          - name: tier
+            data_type: varchar
+          - name: lp
+            data_type: number

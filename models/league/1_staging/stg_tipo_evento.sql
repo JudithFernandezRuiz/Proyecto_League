@@ -1,17 +1,17 @@
 with source as (
 
-    select * from {{ source('bronze', 'raw_eventos') }}
+    select * from {{ ref('base__eventos') }}
 
 ),
 
-renamed as (
+final as (
 
     select distinct
-        row_number() over (order by tipo_evento) as id,
-        tipo_evento as nombre
+        {{ dbt_utils.generate_surrogate_key(['tipo_evento']) }}  as id,
+        tipo_evento                                              as nombre
     from source
     where tipo_evento is not null
 
 )
 
-select * from renamed
+select * from final

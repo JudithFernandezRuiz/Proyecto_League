@@ -4,21 +4,29 @@ with stg_campeon as (
 
 ),
 
-stg_tipo_campeon as (
+stg_clase as (
 
-    select * from {{ ref('stg_tipo_campeon') }}
+    select * from {{ ref('stg_clase_campeon') }}
+
+),
+
+stg_rol as (
+
+    select * from {{ ref('stg_tipo_rol') }}
 
 ),
 
 final as (
 
     select
-        c.id,
+        c.id_campeon,
+        c.champion_key,
         c.nombre,
-        t.clase,
-        t.rol_principal
+        cl.clase,
+        r.rol_principal
     from stg_campeon c
-    left join stg_tipo_campeon t on c.id = t.id
+    left join stg_clase cl  on cl.id_clase = c.id_clase
+    left join stg_rol r     on r.id_rol = c.id_rol
 
 )
 

@@ -7,15 +7,13 @@ with source as (
 renamed as (
 
     select
-        row_number() over (order by match_id, orden) as id,
-        match_id as id_partida,
-        -- El id_jugador se obtiene del summonerName en el join con stg_jugador
-        -- Lo dejamos como null por ahora ya que necesita join
-        null::integer as id_jugador,
-        championid::integer as id_campeon,
-        tipo as tipo_accion,
-        orden::integer as orden_secuencia,
-        case when equipo = '100' then 'BLUE' else 'RED' end as lado
+        {{ dbt_utils.generate_surrogate_key(['match_id', 'orden::varchar', 'tipo']) }}  as id,
+        match_id                                                                         as id_partida,
+        null::integer                                                                    as id_jugador,
+        championid::integer                                                              as id_campeon,
+        tipo                                                                             as tipo_accion,
+        orden::integer                                                                   as orden_secuencia,
+        CASE WHEN equipo::integer = 100 THEN 'Azul' ELSE 'Rojo' END                    as lado
     from source
     where match_id is not null
       and championid is not null
