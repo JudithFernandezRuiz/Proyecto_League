@@ -3,13 +3,9 @@ version: 2
 models:
 
   - name: stg_jugador
-    description: "Jugadores únicos con su elo y equipo"
+    description: "Jugadores únicos con su elo y rango"
     columns:
       - name: id_jugador
-        tests:
-          - unique
-          - not_null
-      - name: puuid
         tests:
           - unique
           - not_null
@@ -40,7 +36,7 @@ models:
   - name: stg_campeon
     description: "Catálogo de campeones únicos"
     columns:
-      - name: id_campeon
+      - name: id_tipo_campeon
         tests:
           - unique
           - not_null
@@ -144,7 +140,7 @@ models:
       - name: id_partida
         tests:
           - not_null
-      - name: puuid
+      - name: id_jugador
         tests:
           - not_null
       - name: lado
@@ -177,8 +173,3 @@ models:
       - name: id_tipo_evento
         tests:
           - not_null
-
- 
-
-  
- 

@@ -1,22 +1,22 @@
 with source as (
-    select * from {{ source('bronze', 'raw_challenger_jugadores') }}
+    select * from {{ ref('base__partida') }}
 ),
 
 renamed as (
-    select distinct
+    select
         match_id as id,
         gameversion as patch,
         CASE 
-            WHEN queueId = '420' THEN 'RANKED_SOLO'
-            WHEN queueId = '440' THEN 'FLEX_Q'
-            WHEN queueId = '450' THEN 'ARAM'
+            WHEN queueid = '420' THEN 'RANKED_SOLO'
+            WHEN queueid = '440' THEN 'FLEX_Q'
+            WHEN queueid = '450' THEN 'ARAM'
             ELSE 'OTHER'
         END as modo_juego,
-        win as resultado,
+        null as resultado,
         TO_TIMESTAMP(gamestarttimestamp::bigint / 1000) as fecha_inicio,
         NULL::timestamp as fecha_fin
     from source
-    where match_id is not null  -- Solo esta condición
+    where match_id is not null
 ),
 
 deduplicado as (

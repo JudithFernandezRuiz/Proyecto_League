@@ -1,23 +1,23 @@
 with source as (
-
-    select * from {{ source('bronze', 'jugador') }}
-
+    select * from {{ ref('base__jugador') }}
 ),
 
 final as (
-
     select
-        {{ dbt_utils.generate_surrogate_key(['puuid']) }}   as id_jugador,
-        puuid,
-        nombre_invocador,
+        
+        substring(cast(puuid as string), 1, 12) as id_jugador, 
+        summonername as nombre_invocador,
         elo,
         tier,
-        lp::integer                                         as lp
+        lp::integer as lp
     from source
     where puuid is not null
-      and nombre_invocador is not null
-    qualify ROW_NUMBER() OVER (PARTITION BY puuid ORDER BY puuid) = 1
-
+      and summonername is not null
+     
+      and id <= 300 
+    
+    
+    qualify ROW_NUMBER() OVER (PARTITION BY id_jugador ORDER BY lp desc) = 1
 )
 
 select * from final

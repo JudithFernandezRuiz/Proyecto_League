@@ -12,7 +12,7 @@ rol as (
 
 final as (
     select
-        -- CAMBIO: MD5 de id + clase como id_tipo_campeon
+       
         MD5(CAST(base.champion_key AS VARCHAR) || base.clase) as id_tipo_campeon,
         base.champion_key,
         base.nombre,

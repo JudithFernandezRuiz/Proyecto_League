@@ -6,7 +6,7 @@ with source as (
 
 final as (
 
-    select distinct
+    select
         match_id,
         timestamp_ms,
         tipo_evento,
@@ -29,9 +29,10 @@ final as (
         shutdownbounty,
         killtype
     from source
+   
     qualify ROW_NUMBER() OVER (
         PARTITION BY match_id, timestamp_ms, tipo_evento, participantid, killerid, victimid, itemid, skillslot
-        ORDER BY match_id
+        ORDER BY timestamp_ms ASC
     ) = 1
 
 )

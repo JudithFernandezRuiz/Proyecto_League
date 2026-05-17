@@ -9,16 +9,12 @@ final as (
         orden,
         tipo,
         championid,
-        equipo,
-        teamid
+        equipo
     from source
     where match_id is not null
       and championid is not null
-    
-    qualify ROW_NUMBER() OVER (
-        PARTITION BY match_id, orden, tipo, championid, equipo
-        ORDER BY match_id
-    ) = 1
+      and summonername is not null
+      and summonername != ''
 )
 
 select * from final
