@@ -31,7 +31,7 @@ with_partida as (
         source.tipo,
         source.championid,
         source.equipo,
-        -- Diferenciamos los modos de juego para mantener el orden real en competitivo/SoloQ
+        
         CASE 
             WHEN p.modo_juego IN ('COMPETITIVE', 'MATCH_MAKING_BANS', '5v5_FLEX', 'RANKED_SOLO') THEN source.orden::integer
             ELSE -1
@@ -54,7 +54,7 @@ with_jugador as (
             ORDER BY with_partida.match_id
         ) as rn
     from with_partida
-    -- JOIN MEJORADO: Limpiamos espacios y eliminamos el tagline (#) por si acaso difieren entre tablas
+    
     left join stg_jugador j on 
         LOWER(TRIM(SPLIT_PART(with_partida.summonername, '#', 1))) = LOWER(TRIM(SPLIT_PART(j.nombre_invocador, '#', 1)))
 ),
