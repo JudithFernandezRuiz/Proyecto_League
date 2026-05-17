@@ -1,10 +1,11 @@
 version: 2
 
 models:
+
   - name: stg_jugador
     description: "Jugadores únicos con su elo y equipo"
     columns:
-      - name: id
+      - name: id_jugador
         tests:
           - unique
           - not_null
@@ -39,11 +40,17 @@ models:
   - name: stg_campeon
     description: "Catálogo de campeones únicos"
     columns:
-      - name: id
+      - name: id_campeon
         tests:
           - unique
           - not_null
       - name: nombre
+        tests:
+          - not_null
+      - name: id_clase
+        tests:
+          - not_null
+      - name: id_rol
         tests:
           - not_null
     
@@ -54,13 +61,30 @@ models:
         tests:
           - unique
           - not_null
+      - name: nombre
+        tests:
+          - not_null
 
-  - name: stg_tipo_campeon
-    description: "Clasificación de campeones por clase y rol"
+  - name: stg_clase_campeon
+    description: "Clases únicas de campeones"
     columns:
-      - name: id
+      - name: id_clase
         tests:
           - unique
+          - not_null
+      - name: clase
+        tests:
+          - not_null
+
+  - name: stg_tipo_rol
+    description: "Roles únicos de campeones"
+    columns:
+      - name: id_rol
+        tests:
+          - unique
+          - not_null
+      - name: rol_principal
+        tests:
           - not_null
 
   - name: stg_posicion_jugador
@@ -113,6 +137,10 @@ models:
   - name: stg_jugador_partida
     description: "Relación jugador partida"
     columns:
+      - name: id_jugador_partida
+        tests:
+          - unique
+          - not_null
       - name: id_partida
         tests:
           - not_null
@@ -123,29 +151,34 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['BLUE', 'RED']
+              arguments: 
+                values: ['Azul', 'Rojo']
+      
+      - name: id_posicion_jugador
+        tests:
+          - not_null
 
   - name: stg_evento_partida
     description: "Eventos del timeline de cada partida"
     columns:
+      - name: id_evento
+        tests:
+          - unique
+          - not_null
       - name: id_jugador
         tests:
           - not_null
       - name: id_partida
         tests:
           - not_null
+      - name: tiempo_partida
+        tests:
+          - not_null
+      - name: id_tipo_evento
+        tests:
+          - not_null
 
-  - name: stg_equipo
-    description: "Bandos del juego"
-    columns:
-      - name: id
-        tests:
-          - unique
-          - not_null
-      - name: nombre
-        tests:
-          - not_null
+ 
 
   
  

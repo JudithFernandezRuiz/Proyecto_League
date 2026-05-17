@@ -1,40 +1,23 @@
 with source as (
 
-    select * from {{ source('bronze', 'raw_challenger_jugadores') }}
+    select * from {{ source('bronze', 'jugador') }}
 
 ),
 
-renamed as (
+final as (
 
     select
-        row_number() over (order by puuid) as id,
-        case when participantid::integer <= 5 then 100 else 200 end as id_equipo,
-        summonername as nombre_invocador,
+        {{ dbt_utils.generate_surrogate_key(['puuid']) }}   as id_jugador,
         puuid,
+        nombre_invocador,
         elo,
         tier,
-        lp::integer as lp
+        lp::integer                                         as lp
     from source
     where puuid is not null
-      and summonername is not null
-
-),
-
-deduplicado as (
-
-    select *,
-        row_number() over (partition by puuid order by id) as rn
-    from renamed
+      and nombre_invocador is not null
+    qualify ROW_NUMBER() OVER (PARTITION BY puuid ORDER BY puuid) = 1
 
 )
 
-select
-    id,
-    id_equipo,
-    nombre_invocador,
-    puuid,
-    elo,
-    tier,
-    lp
-from deduplicado
-where rn = 1
+select * from final

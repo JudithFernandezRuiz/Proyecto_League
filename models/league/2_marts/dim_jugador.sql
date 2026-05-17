@@ -4,24 +4,16 @@ with stg_jugador as (
 
 ),
 
-stg_equipo as (
-
-    select * from {{ ref('stg_equipo') }}
-
-),
-
 final as (
 
     select
-        j.id,
-        j.nombre_invocador,
-        j.puuid,
-        j.elo,
-        j.tier,
-        j.lp,
-        e.nombre as equipo
-    from stg_jugador j
-    left join stg_equipo e on j.id_equipo = e.id
+        id_jugador,
+        nombre_invocador,
+        puuid,
+        elo,
+        tier,
+        lp
+    from stg_jugador
 
 )
 

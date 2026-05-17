@@ -22,10 +22,10 @@ models:
       - name: modo_juego
         description: Tipo de cola (RANKED_SOLO, FLEX_Q, ARAM, OTHER)
         data_tests:
-          - not_null
-          - accepted_values:
-              arguments: 
-                values: ['SOLO_Q', 'FLEX_Q', 'ARAM', 'OTHER']
+        - not_null
+        - accepted_values:
+            arguments:
+              values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
                 
       - name: resultado
         description: Resultado de la partida (VICTORIA o DERROTA)
@@ -92,12 +92,10 @@ models:
           - not_null
       
       - name: lado
-        description: Lado del equipo (BLUE=100 o RED=200)
-        data_tests:
-          - not_null
-          - accepted_values:
-              arguments: 
-                values: ['BLUE', 'RED']
+        tests:
+        - accepted_values:
+            arguments:
+              values: ['Azul', 'Rojo']
       
       - name: resultado
         description: Resultado individual del jugador (true=victoria, false=derrota)
@@ -131,12 +129,10 @@ models:
                 min_value: 0
                 max_value: 100
       
-      - name: posicion
-        description: Posición del jugador en la partida (TOP, JUNGLE, MID, BOTTOM, SUPPORT)
+      - name: id_posicion_jugador
+        description: Posición del jugador en la partida
         data_tests:
-          - accepted_values:
-              arguments: 
-                values: ['TOP', 'JUNGLE', 'MID', 'MIDDLE', 'BOTTOM', 'SUPPORT', 'UTILITY']
+          - not_null
       
       - name: oro_total
         description: Oro total generado por el jugador en la partida

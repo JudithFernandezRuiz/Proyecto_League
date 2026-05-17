@@ -20,11 +20,15 @@ clean-targets:
 models:
   Proyecto_League:
     league:
+      base:
+        +materialized: view
+        +database: SILVER_DEV
+        +schema: base
       1_staging:
+        +materialized: view
         +database: SILVER_DEV
         +schema: staging
-        +materialized: view
       2_marts:
+        +materialized: table
         +database: GOLD_DEV
         +schema: marts
-        +materialized: table
