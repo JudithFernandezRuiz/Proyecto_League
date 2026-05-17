@@ -40,7 +40,7 @@ models:
   - name: stg_campeon
     description: "Catálogo de campeones únicos"
     columns:
-      - name: id_campeon
+      - name: id_tipo_campeon
         tests:
           - unique
           - not_null
@@ -144,6 +144,9 @@ models:
       - name: id_partida
         tests:
           - not_null
+      - name: id_jugador
+        tests:
+          - not_null
       - name: puuid
         tests:
           - not_null
@@ -177,8 +180,3 @@ models:
       - name: id_tipo_evento
         tests:
           - not_null
-
- 
-
-  
- 

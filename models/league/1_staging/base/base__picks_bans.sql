@@ -1,3 +1,5 @@
+-- models/league/1_staging/base/base__picks_bans.sql
+
 with source as (
     select * from {{ source('bronze', 'raw_picks_bans') }}
 ),
@@ -9,16 +11,10 @@ final as (
         orden,
         tipo,
         championid,
-        equipo,
-        teamid
+        equipo
     from source
     where match_id is not null
       and championid is not null
-    
-    qualify ROW_NUMBER() OVER (
-        PARTITION BY match_id, orden, tipo, championid, equipo
-        ORDER BY match_id
-    ) = 1
 )
 
 select * from final

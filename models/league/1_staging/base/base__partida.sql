@@ -7,8 +7,7 @@ final as (
         match_id,
         gameversion,
         queueid,
-        gamestarttimestamp,
-        gameduration
+        gamestarttimestamp
     from source
     where match_id is not null
     

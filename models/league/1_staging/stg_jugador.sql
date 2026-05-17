@@ -1,23 +1,19 @@
 with source as (
-
-    select * from {{ source('bronze', 'jugador') }}
-
+    select * from {{ ref('base__jugador') }}
 ),
 
 final as (
-
     select
-        {{ dbt_utils.generate_surrogate_key(['puuid']) }}   as id_jugador,
+        {{ dbt_utils.generate_surrogate_key(['puuid']) }} as id_jugador,
         puuid,
-        nombre_invocador,
+        summonername as nombre_invocador,
         elo,
         tier,
-        lp::integer                                         as lp
+        lp::integer as lp
     from source
     where puuid is not null
-      and nombre_invocador is not null
+      and summonername is not null
     qualify ROW_NUMBER() OVER (PARTITION BY puuid ORDER BY puuid) = 1
-
 )
 
 select * from final
