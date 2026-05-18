@@ -97,9 +97,12 @@ models:
   - name: stg_ping
     description: "Tipos de pings"
     columns:
-      - name: id
+      - name: id_tipo_ping
         tests:
           - unique
+          - not_null
+      - name: tipo
+        tests:
           - not_null
 
   - name: stg_pick_o_ban
@@ -137,7 +140,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: id_partida
+      - name: match_id
         tests:
           - not_null
       - name: id_jugador
@@ -160,9 +163,6 @@ models:
       - name: id_evento
         tests:
           - unique
-          - not_null
-      - name: id_jugador
-        tests:
           - not_null
       - name: id_partida
         tests:
