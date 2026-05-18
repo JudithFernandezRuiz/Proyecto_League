@@ -6,7 +6,7 @@ final as (
     select distinct
         puuid,
         summonername,
-        elo,
+        'CHALLENGER' as elo,
         tier,
         lp
     from source
