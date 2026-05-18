@@ -1,9 +1,4 @@
-{{ config(
-    materialized='incremental',
-    unique_key='id',
-    incremental_strategy='delete+insert',
-    on_schema_change='sync_all_columns'
-) }}
+{{ config(materialized='incremental', unique_key='id_rendimiento_jugador', incremental_strategy='delete+insert', on_schema_change='sync_all_columns') }}
 
 with stg_jugador_partida as (
     select * from {{ ref('stg_jugador_partida') }}
@@ -28,10 +23,10 @@ raw as (
 
 final as (
     select
-        {{ dbt_utils.generate_surrogate_key(['jp.match_id', 'jp.id_jugador']) }}    as id,
+        {{ dbt_utils.generate_surrogate_key(['jp.match_id', 'jp.id_jugador']) }}    as id_rendimiento_jugador,
         jp.match_id                                                                 as id_partida,
         jp.id_jugador,
-        r.championid::integer                                                       as id_campeon,
+        {{ dbt_utils.generate_surrogate_key(['r.championid']) }}                    as id_campeon,
         EXTRACT(YEAR FROM p.fecha_inicio)                                           as anio,
         EXTRACT(MONTH FROM p.fecha_inicio)                                          as mes,
         EXTRACT(DAY FROM p.fecha_inicio)                                            as dia,

@@ -36,7 +36,7 @@ models:
   - name: stg_campeon
     description: "Catálogo de campeones únicos"
     columns:
-      - name: id_tipo_campeon
+      - name: id_campeon
         tests:
           - unique
           - not_null
@@ -53,11 +53,11 @@ models:
   - name: stg_tipo_evento
     description: "Catálogo de tipos de eventos"
     columns:
-      - name: id
+      - name: id_tipo_evento
         tests:
           - unique
           - not_null
-      - name: nombre
+      - name: descripcion_evento  
         tests:
           - not_null
 
