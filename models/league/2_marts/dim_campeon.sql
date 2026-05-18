@@ -12,7 +12,7 @@ stg_rol as (
 
 final as (
     select
-        c.id_tipo_campeon as id_campeon, -- Cambiado al identificador correcto que viene de staging
+        c.id_campeon as id_campeon, -- Cambiado al identificador correcto que viene de staging
         c.nombre,
         cl.clase,
         r.rol_principal

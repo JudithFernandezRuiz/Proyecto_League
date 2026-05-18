@@ -1,17 +1,21 @@
 with source as (
-
-    select * from {{ ref('base__eventos') }}
-
+   
+    
+    select distinct tipo_evento 
+    from {{ ref('base__eventos') }}
+    where tipo_evento is not null
 ),
 
 final as (
-
-    select distinct
-        {{ dbt_utils.generate_surrogate_key(['tipo_evento']) }}  as id,
-        tipo_evento                                              as nombre
+    select
+        
+        row_number() over (order by tipo_evento) as id_tipo_evento,
+        tipo_evento as descripcion_evento
     from source
-    where tipo_evento is not null
-
 )
 
-select * from final
+
+select 
+    id_tipo_evento,
+    descripcion_evento
+from final

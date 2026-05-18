@@ -24,15 +24,13 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
+              values: ['RANKED_SOLO', 'FLEX_Q', 'ARAM', 'OTHER']
                 
       - name: resultado
         description: Resultado de la partida (VICTORIA o DERROTA)
         data_tests:
           - accepted_values:
-              arguments: 
-                values: ['VICTORIA', 'DERROTA']
+              values: ['Victoria Azul', 'Victoria Rojo']
       
       - name: fecha_inicio
         description: Timestamp del inicio de la partida
@@ -48,7 +46,7 @@ models:
   - name: fact_rendimiento_jugador
     description: Hechos sobre el rendimiento individual de cada jugador en cada partida
     columns:
-      - name: id
+      - name: id_rendimiento_jugador
         description: Identificador único de la fila (Surrogate Key hash de partida + jugador)
         data_tests:
           - unique
@@ -59,9 +57,8 @@ models:
         data_tests:
           - not_null
           - relationships:
-              arguments: 
-                to: ref('fact_resultado_partida') # Corregido para que apunte a tu tabla fact de partidas
-                field: id_partida
+              to: ref('fact_resultado_partida')
+              field: id_partida
       
       - name: id_jugador
         description: Player UUID (PUUID) - identificador único de Riot del jugador
@@ -83,8 +80,7 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              arguments: 
-                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
       
       - name: dia
         description: Día del mes de la partida (1-31)
@@ -95,8 +91,7 @@ models:
         description: Lado del mapa en el que jugó
         data_tests:
           - accepted_values:
-              arguments:
-                values: ['Azul', 'Rojo']
+              values: ['Azul', 'Rojo']
       
       - name: resultado
         description: Resultado individual del jugador (true=victoria, false=derrota)
@@ -108,27 +103,24 @@ models:
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments: 
-                min_value: 0
-                max_value: 100
+              min_value: 0
+              max_value: 100
       
       - name: muertes
         description: Número de muertes del jugador
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments: 
-                min_value: 0
-                max_value: 100
+              min_value: 0
+              max_value: 100
       
       - name: asistencias
         description: Número de asistencias del jugador
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments: 
-                min_value: 0
-                max_value: 100
+              min_value: 0
+              max_value: 100
       
       - name: id_posicion_jugador
         description: ID de la posición del jugador en la partida
@@ -140,9 +132,8 @@ models:
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments: 
-                min_value: 0
-                max_value: 50000
+              min_value: 0
+              max_value: 50000
 
   # ===================================
   # DIMENSIONS - Tablas de dimensión
@@ -174,7 +165,9 @@ models:
         description: Timestamp del fin de la partida
       
       - name: resultado
-        description: Resultado general de la partida
+        data_tests:
+          - accepted_values:
+              values: ['Victoria Azul', 'Victoria Rojo']
 
   - name: dim_tiempo
     description: Dimensión temporal con granularidad diaria (calendario)
@@ -210,5 +203,4 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              arguments: 
-                values: ['S1', 'S2', 'S3', 'S4']
+              values: ['S1', 'S2', 'S3', 'S4']

@@ -22,13 +22,13 @@ models:
     league:
       base:
         +materialized: view
-        +database: SILVER_DEV
+        +database: "{{ 'SILVER_' ~ env_var('DBT_ENVIRONMENTS') }}"
         +schema: base
       1_staging:
         +materialized: view
-        +database: SILVER_DEV
+        +database: "{{ 'SILVER_' ~ env_var('DBT_ENVIRONMENTS') }}"
         +schema: staging
       2_marts:
         +materialized: table
-        +database: GOLD_DEV
+        +database: "{{ 'GOLD_' ~ env_var('DBT_ENVIRONMENTS') }}"
         +schema: marts

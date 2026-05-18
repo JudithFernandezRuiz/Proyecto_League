@@ -12,9 +12,13 @@ rol as (
 
 final as (
     select
+        
+        {{ dbt_utils.generate_surrogate_key([
+            'base.champion_key', 
+            'base.clase'
+        ]) }} as id_campeon,
+        
        
-        MD5(CAST(base.champion_key AS VARCHAR) || base.clase) as id_tipo_campeon,
-        base.champion_key,
         base.nombre,
         clase.id_clase,
         rol.id_rol
