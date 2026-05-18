@@ -16,7 +16,7 @@ select
     elo,
     tier,
     lp::integer as lp
-from {{ source('bronze', 'raw_challenger_jugadores') }}
+from {{ ref('base__jugador') }} 
 where puuid is not null
 qualify row_number() over (partition by puuid order by puuid) = 1
 
