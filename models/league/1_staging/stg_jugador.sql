@@ -4,10 +4,10 @@ with source as (
 
 final as (
     select
-        -- Tu regla: nos quedamos con el puuid haciéndole un cast para que sea legible
+        
         substring(cast(puuid as string), 1, 12) as id_jugador, 
         summonername as nombre_invocador,
-        'CHALLENGER' as elo,
+        elo,
         tier,
         lp::integer as lp
     from source

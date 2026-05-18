@@ -1,3 +1,9 @@
+{{ config(
+    materialized='incremental',
+    incremental_strategy='append',
+    on_schema_change='sync_all_columns'
+) }}
+
 with source as (
     select * from {{ ref('base__eventos') }}
 ),
@@ -20,15 +26,15 @@ final as (
             'source.tipo_evento'
         ]) }} as id_evento,
         
-        source.match_id                                                                as id_partida,
-        substring(cast(p.puuid as string), 1, 12)                                      as id_jugador,
+        source.match_id                                                                 as id_partida,
+        substring(cast(p.puuid as string), 1, 12)                                       as id_jugador,
         
         DATEADD('millisecond', 
             source.timestamp_ms::bigint, 
             sp.fecha_inicio)                                                           as tiempo_partida,
             
         {{ dbt_utils.generate_surrogate_key(['source.tipo_evento']) }}  as id_tipo_evento,
-        source.tipo_evento                                                             as descripcion_evento
+        source.tipo_evento                                                              as descripcion_evento
         
     from source
    
@@ -36,14 +42,15 @@ final as (
         on source.match_id = p.match_id 
         and source.participantid::integer = p.participantid::integer
     
-    
     inner join stg_partida sp
         on sp.id = source.match_id
         
     where source.timestamp_ms is not null
       and source.tipo_evento is not null
       
-
+    {% if is_incremental() %}
+      and source.match_id not in (select distinct id_partida from {{ this }})
+    {% endif %}
     
     qualify ROW_NUMBER() OVER (
         PARTITION BY substring(cast(p.puuid as string), 1, 12), source.match_id, source.timestamp_ms, source.tipo_evento

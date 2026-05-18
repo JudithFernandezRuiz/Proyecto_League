@@ -29,7 +29,7 @@ final as (
     from stg_partida p
     
     {% if is_incremental() %}
-    -- Corregido para que apunte exactamente a la columna id_partida del historico
+    
     where p.id not in (select id_partida from {{ this }})
     {% endif %}
 )
