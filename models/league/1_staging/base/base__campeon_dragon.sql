@@ -4,11 +4,10 @@ with source as (
 
 final as (
     select
-        {{ dbt_utils.generate_surrogate_key(['id']) }}      as id_campeon,
-        id                                                  as champion_key,
+        {{ dbt_utils.generate_surrogate_key(['id']) }} AS id_campeon,
+        {{ dbt_utils.generate_surrogate_key(['clase']) }} AS id_clase_campeon,
         nombre,
-        clase,
-        rol_principal
+        clase
     from source
 )
 

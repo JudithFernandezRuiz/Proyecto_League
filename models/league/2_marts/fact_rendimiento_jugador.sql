@@ -1,4 +1,6 @@
-{{ config(materialized='incremental', unique_key='id_rendimiento_jugador', incremental_strategy='delete+insert', on_schema_change='sync_all_columns') }}
+{{ config(
+    materialized='table'
+) }}
 
 with stg_jugador_partida as (
     select * from {{ ref('stg_jugador_partida') }}
@@ -24,7 +26,7 @@ raw as (
 final as (
     select
         {{ dbt_utils.generate_surrogate_key(['jp.match_id', 'jp.id_jugador']) }}    as id_rendimiento_jugador,
-        jp.match_id                                                                 as id_partida,
+        jp.match_id                                                                  as id_partida,
         jp.id_jugador,
         {{ dbt_utils.generate_surrogate_key(['r.championid']) }}                    as id_campeon,
         EXTRACT(YEAR FROM p.fecha_inicio)                                           as anio,
@@ -40,11 +42,7 @@ final as (
     from stg_jugador_partida jp
     inner join stg_partida p    on p.id = jp.match_id  
     inner join raw r            on r.match_id = jp.match_id 
-                               and r.id_jugador = jp.id_jugador
-
-    {% if is_incremental() %}
-    where jp.match_id not in (select distinct id_partida from {{ this }})
-    {% endif %}
+                                and r.id_jugador = jp.id_jugador
 )
 
 select * from final

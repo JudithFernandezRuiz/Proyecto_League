@@ -12,11 +12,11 @@ renamed as (
             WHEN queueid = '450' THEN 'ARAM'
             ELSE 'OTHER'
         END                                                     as modo_juego,
-        CASE
-            WHEN MAX(CASE WHEN win = 'True' AND participantid::integer <= 5 THEN 1 ELSE 0 END) OVER (PARTITION BY match_id) = 1
+        CASE 
+            WHEN MAX(CASE WHEN win::varchar ILIKE 'true' AND participantid::integer <= 5 THEN 1 ELSE 0 END) OVER (PARTITION BY match_id) = 1
             THEN 'Victoria Azul'
             ELSE 'Victoria Rojo'
-        END                                                     as resultado,
+        END                                               as resultado,
         TO_TIMESTAMP(gamestarttimestamp::bigint / 1000)         as fecha_inicio,
         fecha_fin                                               as fecha_fin
     from source

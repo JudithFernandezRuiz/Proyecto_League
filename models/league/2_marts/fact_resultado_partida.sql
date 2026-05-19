@@ -17,18 +17,19 @@ final as (
         p.id                                         as id_partida,
         p.patch,
         p.modo_juego,
-        CASE 
-            WHEN LOWER(p.resultado) = 'true' THEN 'Victoria Azul'
-            WHEN LOWER(p.resultado) = 'false' THEN 'Victoria Rojo'
-            ELSE p.resultado 
-        END                                          as resultado,
+        --CASE 
+         --   WHEN LOWER(p.resultado) = 'true' THEN 'Victoria Azul'
+         --   WHEN LOWER(p.resultado) = 'false' THEN 'Victoria Rojo'
+         --   ELSE p.resultado 
+        --END                                          as 
+        p.resultado,
         p.fecha_inicio,
         p.fecha_fin,
         DATEDIFF(second, p.fecha_inicio, p.fecha_fin) as duracion_segundos
     from stg_partida p
     
     {% if is_incremental() %}
-    -- Corregido para que apunte exactamente a la columna id_partida del historico
+    
     where p.id not in (select id_partida from {{ this }})
     {% endif %}
 )

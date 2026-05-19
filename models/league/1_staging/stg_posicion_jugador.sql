@@ -1,16 +1,16 @@
--- Tabla de referencia: posiciones en el mapa
-with posiciones as (
+with source as (
+    select * from {{ ref('base__jugador_partida') }}
+),
 
-    select 1 as id, 'TOP' as nombre
-    union all
-    select 2, 'JUNGLE'
-    union all
-    select 3, 'MIDDLE'
-    union all
-    select 4, 'BOTTOM'
-    union all
-    select 5, 'UTILITY'
-
-)
-
-select * from posiciones
+stg_posicion_jugador AS (
+    SELECT DISTINCT
+        id_posicion_jugador AS id,
+        CASE
+            WHEN teamposition = 'JUNGLE' THEN 'Jungla'
+            WHEN teamposition = 'MIDDLE' THEN 'Medio'
+            WHEN teamposition = 'BOTTOM' THEN 'ADC'
+            WHEN teamposition = 'UTILITY' THEN 'Support'
+            ELSE 'Top'
+        END AS nombre_posicion
+    FROM source
+) SELECT * FROM stg_posicion_jugador

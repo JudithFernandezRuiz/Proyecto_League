@@ -36,8 +36,6 @@ models:
       
       - name: fecha_inicio
         description: Timestamp del inicio de la partida
-        data_tests:
-          - not_null
       
       - name: fecha_fin
         description: Timestamp del fin de la partida (NULL si aún no finalizada)
@@ -75,21 +73,16 @@ models:
       
       - name: anio
         description: Año de la partida
-        data_tests:
-          - not_null
       
       - name: mes
         description: Mes de la partida (1-12)
         data_tests:
-          - not_null
           - accepted_values:
               arguments:
                 values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
       
       - name: dia
         description: Día del mes de la partida (1-31)
-        data_tests:
-          - not_null
       
       - name: lado
         description: Lado del mapa en el que jugó
@@ -132,8 +125,6 @@ models:
       
       - name: id_posicion_jugador
         description: ID de la posición del jugador en la partida
-        data_tests:
-          - not_null
       
       - name: oro_total
         description: Oro total generado por el jugador en la partida

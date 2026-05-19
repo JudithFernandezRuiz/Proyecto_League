@@ -4,7 +4,7 @@ with stg_jugador as (
 
 final as (
     select
-        id_jugador,       -- Tu clave primaria real (que contiene el PUUID)
+        id_jugador,       
         nombre_invocador,
         elo,
         lp

@@ -14,9 +14,11 @@ final as (
         deaths,
         assists,
         participantid,
-        individualposition,
+        {{ dbt_utils.generate_surrogate_key(['teamposition']) }} AS id_posicion_jugador,
+        teamposition,
         goldearned,
-        gameversion
+        gameversion,
+        gamestarttimestamp
     from source
     where match_id is not null
       and puuid is not null
