@@ -29,9 +29,10 @@ final as (
         source.match_id                                                                 as id_partida,
         substring(cast(p.puuid as string), 1, 12)                                       as id_jugador,
         
-        DATEADD('millisecond', 
+        -- Removed the single quotes around millisecond
+        DATEADD(millisecond, 
             source.timestamp_ms::bigint, 
-            sp.fecha_inicio)                                                           as tiempo_partida,
+            sp.fecha_inicio)                                                            as tiempo_partida,
             
         {{ dbt_utils.generate_surrogate_key(['source.tipo_evento']) }}  as id_tipo_evento,
         source.tipo_evento                                                              as descripcion_evento
