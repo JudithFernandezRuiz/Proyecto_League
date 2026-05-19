@@ -8,11 +8,12 @@ stg_clase as (
 
 final as (
     select
-        c.id_campeon as id_campeon, -- Cambiado al identificador correcto que viene de staging
+        c.id,
         c.nombre,
-        cl.clase,
+        cl.nombre_clase,
     from stg_campeon c
-    left join stg_clase cl  on cl.id_clase = c.id_clase
+    join stg_clase cl  
+    on cl.id = c.id_clase_campeon
 )
 
 select * from final

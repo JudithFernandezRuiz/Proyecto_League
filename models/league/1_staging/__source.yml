@@ -18,7 +18,11 @@ sources:
             description: "Champion ID used in match"
           - name: wins
             description: "Win result (true/false)"
-      
+          - name: teamposition
+            description: "Posición del jugador dentro de la partida"
+          - name: gamestarttimestamp
+            description: "Fecha Inicio de la partida"
+
       - name: raw_picks_bans
         description: "Raw data from challenger_picks_bans.csv - picks and bans per match"
         columns:
@@ -76,16 +80,3 @@ sources:
             description: "Item gold cost"
             tests:
               - not_null
-      - name: jugador
-        description: "Perfil de los invocadores (Nombre, PUUID, Rango)"
-        columns:
-          - name: puuid
-            data_type: varchar
-          - name: nombre_invocador
-            data_type: varchar
-          - name: elo
-            data_type: varchar
-          - name: tier
-            data_type: varchar
-          - name: lp
-            data_type: number

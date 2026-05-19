@@ -10,20 +10,20 @@ with fact as (
 
 ranked as (
     select
-        id_jugador, -- Cambiado de puuid a id_jugador
+        id_jugador, 
         id_campeon,
-        COUNT(*)                                                        as partidas_jugadas,
-        SUM(CASE WHEN resultado = 'True' THEN 1 ELSE 0 END)            as victorias,
-        ROUND(SUM(CASE WHEN resultado = 'True' THEN 1 ELSE 0 END) * 100.0
-            / COUNT(*), 2)                                             as winrate_pct,
-        RANK() OVER (PARTITION BY id_jugador ORDER BY COUNT(*) DESC)   as ranking_uso -- Cambiado de puuid a id_jugador
+        COUNT(*) as partidas_jugadas,
+        SUM(CASE WHEN resultado::varchar ILIKE 'true' THEN 1 ELSE 0 END) as victorias,
+        ROUND(SUM(CASE WHEN resultado::varchar ILIKE 'true' THEN 1 ELSE 0 END) * 100.0
+            / COUNT(*), 2) as winrate_pct,
+        RANK() OVER (PARTITION BY id_jugador ORDER BY COUNT(*) DESC) as ranking_uso 
     from fact
-    group by id_jugador, id_campeon -- Cambiado de puuid a id_jugador
+    group by id_jugador, id_campeon 
 ),
 
 final as (
     select
-        id_jugador, -- Cambiado de puuid a id_jugador
+        id_jugador, 
         id_campeon,
         partidas_jugadas,
         victorias,

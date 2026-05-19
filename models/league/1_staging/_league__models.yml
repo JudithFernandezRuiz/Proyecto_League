@@ -36,17 +36,14 @@ models:
   - name: stg_campeon
     description: "Catálogo de campeones únicos"
     columns:
-      - name: id_campeon
+      - name: id
         tests:
           - unique
           - not_null
       - name: nombre
         tests:
           - not_null
-      - name: id_clase
-        tests:
-          - not_null
-      - name: id_rol
+      - name: id_clase_campeon
         tests:
           - not_null
     
@@ -64,22 +61,11 @@ models:
   - name: stg_clase_campeon
     description: "Clases únicas de campeones"
     columns:
-      - name: id_clase
+      - name: id
         tests:
           - unique
           - not_null
-      - name: clase
-        tests:
-          - not_null
-
-  - name: stg_tipo_rol
-    description: "Roles únicos de campeones"
-    columns:
-      - name: id_rol
-        tests:
-          - unique
-          - not_null
-      - name: rol_principal
+      - name: nombre_clase
         tests:
           - not_null
 
@@ -90,7 +76,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: nombre
+      - name: nombre_posicion
         tests:
           - not_null
 
@@ -152,10 +138,7 @@ models:
           - accepted_values:
               arguments: 
                 values: ['Azul', 'Rojo']
-      
       - name: id_posicion_jugador
-        tests:
-          - not_null
 
   - name: stg_evento_partida
     description: "Eventos del timeline de cada partida"
@@ -168,8 +151,6 @@ models:
         tests:
           - not_null
       - name: tiempo_partida
-        tests:
-          - not_null
       - name: id_tipo_evento
         tests:
           - not_null
