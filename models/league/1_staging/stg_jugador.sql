@@ -1,10 +1,9 @@
 with source as (
-    select * from {{ ref('base__jugador') }}
+    select * from {{ ref('jugador_snapshot') }}
 ),
 
 final as (
     select
-        
         substring(cast(puuid as string), 1, 12) as id_jugador, 
         summonername as nombre_invocador,
         elo,
