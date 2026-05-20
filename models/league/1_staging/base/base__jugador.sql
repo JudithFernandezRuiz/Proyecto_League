@@ -3,10 +3,10 @@ with source as (
 ),
 
 final as (
-    select distinct
+    select
         puuid,
         summonername,
-        'CHALLENGER' as elo,
+        elo,
         tier,
         lp
     from source
