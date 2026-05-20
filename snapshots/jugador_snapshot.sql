@@ -10,7 +10,7 @@
     )
 }}
 
-select 
+select
     puuid,
     summonername,
     elo,

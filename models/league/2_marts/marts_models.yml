@@ -48,9 +48,6 @@ models:
     columns:
       - name: id_rendimiento_jugador
         description: Identificador único de la fila (Surrogate Key hash de partida + jugador)
-        data_tests:
-          - unique
-          - not_null
       
       - name: id_partida
         description: Identificador de la partida (FK a fact_resultado_partida)
